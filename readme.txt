@@ -14,6 +14,8 @@ Replaces WordPress authentication with external authentication via API.
 
 WordPress authentication is replaced by API calls to an external API to authenticate users.
 
+Everything below here will be changed someday.
+
 A few notes about the sections above:
 
 *   "Contributors" is a comma separated list of wp.org/wp-plugins.org usernames
