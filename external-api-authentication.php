@@ -37,37 +37,40 @@ $eapia_plugin_name = "External API Authentication";
 add_action( 'admin_menu', 'eapia_options_menu' );
 
 function eapia_options_menu() {
-    add_options_page( $eapia_plugin_name . ' Settings', $eapia_plugin_name, 'manage_options', 'eapia-options', 'eapia_options');
     add_action( 'admin_init' , 'eapia_register_settings');
-    };
+    add_options_page( $eapia_plugin_name . ' Settings', $eapia_plugin_name, 'manage_options', 'eapia-settings.php', 'eapia_options');
+    }
 
 function eapia_register_settings() {
-    register_setting( 'eapia-settings-group', 'login-endpoint');
-    register_setting( 'eapia-settings-group', 'username-key');
-    register_setting( 'eapia-settings-group', 'password-key');
+    register_setting( 'eapia-settings-group', 'eapia-login-endpoint');
+    register_setting( 'eapia-settings-group', 'eapia-username-key');
+    register_setting( 'eapia-settings-group', 'eapia-password-key');
 }
 
 
 function eapia_options(){ ?>
         <div class="wrap">
-            <h2><?php _e( $eapia_plugin_name . ' Settings' ); ?></h2>
+            <h2><?php _e( $eapia_plugin_name) . ' Settings' ; ?></h2>
             <form method="post" action="options.php">
-                <?php settings_fields( 'eapia-settings-group' ); ?>
-                <?php do_settings_sections( 'eapia-settings-group' ); ?>
+                <?php
+                settings_fields( 'eapia-settings-group' );
+                do_settings_sections( 'eapia-options' );
+                settings_errors( );
+                ?>
                 <table class="form-table">
                         <tr valign="top">
-                        <th scope="row"><label for="login-endpoint">API endpoint for login</label></div></th>
-                        <td><input type="text" name="login-endpoint" value="<?php echo get_option('login-endpoint'); ?>" /></td>
+                        <th scope="row"><label for="eapia-login-endpoint">API endpoint for login</label></div></th>
+                        <td><input type="text" name="eapia-login-endpoint" value="<?php echo get_option('eapia-login-endpoint'); ?>" /></td>
                         </tr>
 
                         <tr valign="top">
-                        <th scope="row"><label for="username-key">Username key</label>e key</div></th>
-                        <td><input type="text" name="username-key" value="<?php echo get_option('username-key'); ?>" /></td>
+                        <th scope="row"><label for="eapia-username-key">Username key</label>e key</div></th>
+                        <td><input type="text" name="eapia-username-key" value="<?php echo get_option('eapia-username-key'); ?>" /></td>
                         </tr>
 
                         <tr valign="top">
-                        <th scope="row"><label for="password-key">Password key</label>d key</div></th>
-                        <td><input type="text" name="password-key" value="<?php echo get_option('password-key'); ?>" /></td>
+                        <th scope="row"><label for="eapia-password-key">Password key</label>d key</div></th>
+                        <td><input type="text" name="eapia-password-key" value="<?php echo get_option('eapia-password-key'); ?>" /></td>
                         </tr>
                     </table>
 
