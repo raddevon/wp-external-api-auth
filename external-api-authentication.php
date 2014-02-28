@@ -25,9 +25,63 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-add_filter( 'authenticate', 'external_api_auth', 10, 3 );
+/************************************
+* Global Variables
+************************************/
+$eapia_plugin_name = "External API Authentication";
 
-function external_api_auth( $user, $username, $password ){
+
+/************************************
+* Plugin Options
+************************************/
+add_action( 'admin_menu', 'eapia_options_menu' );
+
+function eapia_options_menu() {
+    add_options_page( $eapia_plugin_name . ' Settings', $eapia_plugin_name, 'manage_options', 'eapia-options', 'eapia_options');
+    add_action( 'admin_init' , 'eapia_register_settings');
+    };
+
+function eapia_register_settings() {
+    register_setting( 'eapia-settings-group', 'login-endpoint');
+    register_setting( 'eapia-settings-group', 'username-key');
+    register_setting( 'eapia-settings-group', 'password-key');
+}
+
+
+function eapia_options(){ ?>
+        <div class="wrap">
+            <h2><?php _e( $eapia_plugin_name . ' Settings' ); ?></h2>
+            <form method="post" action="options.php">
+                <?php settings_fields( 'eapia-settings-group' ); ?>
+                <?php do_settings_sections( 'eapia-settings-group' ); ?>
+                <table class="form-table">
+                        <tr valign="top">
+                        <th scope="row"><label for="login-endpoint">API endpoint for login</label></div></th>
+                        <td><input type="text" name="login-endpoint" value="<?php echo get_option('login-endpoint'); ?>" /></td>
+                        </tr>
+
+                        <tr valign="top">
+                        <th scope="row"><label for="username-key">Username key</label>e key</div></th>
+                        <td><input type="text" name="username-key" value="<?php echo get_option('username-key'); ?>" /></td>
+                        </tr>
+
+                        <tr valign="top">
+                        <th scope="row"><label for="password-key">Password key</label>d key</div></th>
+                        <td><input type="text" name="password-key" value="<?php echo get_option('password-key'); ?>" /></td>
+                        </tr>
+                    </table>
+
+                    <?php submit_button(); ?>
+            </form>
+        </div>
+<?php }
+
+/************************************
+* Authentication
+************************************/
+add_filter( 'authenticate', 'eapia_auth', 10, 3 );
+
+function eapia_auth( $user, $username, $password ){
     // Make sure a username and password are present for us to work with
     if($username == '' || $password == '') return;
 
