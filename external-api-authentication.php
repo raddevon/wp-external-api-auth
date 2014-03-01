@@ -25,6 +25,7 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+
 /************************************
 * Global Variables
 ************************************/
@@ -78,6 +79,7 @@ function eapia_options(){ ?>
             </form>
         </div>
 <?php }
+
 
 /************************************
 * Authentication
