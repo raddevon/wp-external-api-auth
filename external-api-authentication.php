@@ -38,8 +38,10 @@ $eapia_plugin_name = "External API Authentication";
 add_action( 'admin_menu', 'eapia_options_menu' );
 
 function eapia_options_menu() {
+    global $eapia_plugin_name;
     add_action( 'admin_init' , 'eapia_register_settings');
-    add_options_page( $eapia_plugin_name . ' Settings', $eapia_plugin_name, 'manage_options', 'eapia-settings.php', 'eapia_options');
+    $eapia_options_page_hook = add_options_page( $eapia_plugin_name . ' Settings', $eapia_plugin_name, 'manage_options', 'eapia-settings.php', 'eapia_options');
+    add_action( 'admin_print_styles-' . $eapia_options_page_hook, 'eapia_admin_print_styles' );
     }
 
 function eapia_register_settings() {
@@ -49,7 +51,8 @@ function eapia_register_settings() {
 }
 
 
-function eapia_options(){ ?>
+function eapia_options(){
+    global $eapia_plugin_name; ?>
         <div class="wrap">
             <h2><?php _e( $eapia_plugin_name) . ' Settings' ; ?></h2>
             <form method="post" action="options.php">
