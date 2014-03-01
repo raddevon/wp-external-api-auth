@@ -44,6 +44,10 @@ function eapia_options_menu() {
     add_action( 'admin_print_styles-' . $eapia_options_page_hook, 'eapia_admin_print_styles' );
     }
 
+function eapia_admin_print_styles() {
+    wp_enqueue_style( 'eapia-admin-css', plugin_dir_url(__FILE__) . 'css/admin.css' );
+}
+
 function eapia_register_settings() {
     register_setting( 'eapia-settings-group', 'eapia-login-endpoint');
     register_setting( 'eapia-settings-group', 'eapia-username-key');
