@@ -78,7 +78,7 @@ function eapia_options(){
                         <th scope="row"><label for="eapia-username-key">Username key</label></div></th>
                         <td>
                             <input type="text" name="eapia-username-key" value="<?php echo get_option('eapia-username-key'); ?>" />
-                            <p>The username will be sent to the API with this key.</p>
+                            <p>The username will be sent to the API with this key. <em>(Default: username)</em></p>
                         </td>
                         </tr>
 
@@ -86,7 +86,7 @@ function eapia_options(){
                         <th scope="row"><label for="eapia-password-key">Password key</label></div></th>
                         <td>
                             <input type="text" name="eapia-password-key" value="<?php echo get_option('eapia-password-key'); ?>" />
-                            <p>The password will be sent to the API with this key.</p>
+                            <p>The password will be sent to the API with this key. <em>(Default: password)</em></p>
                         </td>
                         </tr>
                     </table>
@@ -103,10 +103,13 @@ function eapia_options(){
 add_filter( 'authenticate', 'eapia_auth', 10, 3 );
 
 function eapia_auth( $user, $username, $password ){
+    $endpoint = get_option( 'eapia-login-endpoint' );
+    $username_key = get_option( 'eapia-username-key', 'username' );
+    $password_key = get_option( 'eapia-password-key', 'password' );
     // Make sure a username and password are present for us to work with
-    if($username == '' || $password == '') return;
+    if($username == '' || $password == '' || !$endpoint ) return;
 
-    $response = wp_remote_get( "http://localhost/auth_serv.php?user=$username&pass=$password" );
+    $response = wp_remote_get( "{$endpoint}?{$username_key}={$username}&{$password_key}={$password}" );
     $ext_auth = json_decode( $response['body'], true );
 
      if( $ext_auth['result']  == 0 ) {
