@@ -1,0 +1,8 @@
+h2:before {
+    content: "\f112";
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    font: normal 29px/1 'dashicons';
+    vertical-align: middle;
+    margin-right: 0.3em;
+};
