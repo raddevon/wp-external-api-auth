@@ -68,17 +68,26 @@ function eapia_options(){
                 <table class="form-table">
                         <tr valign="top">
                         <th scope="row"><label for="eapia-login-endpoint">API endpoint for login</label></div></th>
-                        <td><input type="text" name="eapia-login-endpoint" value="<?php echo get_option('eapia-login-endpoint'); ?>" /></td>
+                        <td>
+                            <input type="url" name="eapia-login-endpoint" value="<?php echo get_option('eapia-login-endpoint'); ?>" />
+                            <p>The plugin will post to this URL.</p>
+                        </td>
                         </tr>
 
                         <tr valign="top">
-                        <th scope="row"><label for="eapia-username-key">Username key</label>e key</div></th>
-                        <td><input type="text" name="eapia-username-key" value="<?php echo get_option('eapia-username-key'); ?>" /></td>
+                        <th scope="row"><label for="eapia-username-key">Username key</label></div></th>
+                        <td>
+                            <input type="text" name="eapia-username-key" value="<?php echo get_option('eapia-username-key'); ?>" />
+                            <p>The username will be sent to the API with this key.</p>
+                        </td>
                         </tr>
 
                         <tr valign="top">
-                        <th scope="row"><label for="eapia-password-key">Password key</label>d key</div></th>
-                        <td><input type="text" name="eapia-password-key" value="<?php echo get_option('eapia-password-key'); ?>" /></td>
+                        <th scope="row"><label for="eapia-password-key">Password key</label></div></th>
+                        <td>
+                            <input type="text" name="eapia-password-key" value="<?php echo get_option('eapia-password-key'); ?>" />
+                            <p>The password will be sent to the API with this key.</p>
+                        </td>
                         </tr>
                     </table>
 
