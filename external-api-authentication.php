@@ -111,9 +111,11 @@ function eapia_auth( $user, $username, $password ){
     // Makes sure we have an endpoint set
     if(!$endpoint ) return;
 
-    $response = wp_remote_post( $endpoint, array(
+    // Build the POST request
+    $login_data = array(
         $username_key => $username,
-        $password_key => $password ));
+        $password_key => $password );
+    $response = wp_remote_post( $endpoint, $login_data);
     $ext_auth = json_decode( $response['body'], true );
 
      if( $ext_auth['result']  == 0 ) {
