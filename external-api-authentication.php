@@ -118,7 +118,7 @@ function eapia_auth( $user, $username, $password ){
 
      if( $ext_auth['result']  == 0 ) {
         // User does not exist,  send back an error message
-        $user = new WP_Error( 'denied', __("<strong>ERROR</strong>: User/pass bad") );
+        $user = new WP_Error( 'denied', __("<strong>Error</strong>: Your username or password are incorrect.") );
 
      } else if( $ext_auth['result'] == 1 ) {
          // External user exists, try to load the user info from the WordPress user table
