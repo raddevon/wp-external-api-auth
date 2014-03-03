@@ -40,7 +40,7 @@ add_action( 'admin_menu', 'eapia_options_menu' );
 function eapia_options_menu() {
     global $eapia_plugin_name;
     add_action( 'admin_init' , 'eapia_register_settings');
-    $eapia_options_page_hook = add_options_page( $eapia_plugin_name . ' Settings', $eapia_plugin_name, 'manage_options', 'eapia-settings.php', 'eapia_options');
+    $eapia_options_page_hook = add_options_page( $eapia_plugin_name . ' Settings', $eapia_plugin_name, 'manage_options', 'eapia-settings', 'eapia_render_options');
     add_action( 'admin_print_styles-' . $eapia_options_page_hook, 'eapia_admin_print_styles' );
     }
 
@@ -52,50 +52,115 @@ function eapia_register_settings() {
     register_setting( 'eapia-settings-group', 'eapia-login-endpoint');
     register_setting( 'eapia-settings-group', 'eapia-username-key');
     register_setting( 'eapia-settings-group', 'eapia-password-key');
+    register_setting( 'eapia-settings-group', 'eapia-username');
+    register_setting( 'eapia-settings-group', 'eapia-email');
+
+    add_settings_section( 'eapia-general-settings', 'General', 'eapia_general_options', 'eapia-settings');
+
+    add_settings_field(
+        'eapia-login-endpoint',
+        'API authentication endpoint',
+        'eapia_render_text_input_field',
+        'eapia-settings',
+        'eapia-general-settings',
+        array(
+            'field' => 'eapia-login-endpoint',
+            'help' => '<strong>Required.</strong> The plugin will send a POST request to this URL.',
+            'type' => 'url'
+            )
+        );
+
+    add_settings_field(
+        'eapia-username-key',
+        'Username key',
+        'eapia_render_text_input_field',
+        'eapia-settings',
+        'eapia-general-settings',
+        array(
+            'field' => 'eapia-username-key',
+            'help' => 'The username will be sent to the API with this key. <em>(Default: username)</em>',
+            'type' => 'text'
+            )
+        );
+
+    add_settings_field(
+        'eapia-password-key',
+        'Password key',
+        'eapia_render_text_input_field',
+        'eapia-settings',
+        'eapia-general-settings',
+        array(
+            'field' => 'eapia-password-key',
+            'help' => 'The password will be sent to the API with this key. <em>(Default: password)</em>',
+            'type' => 'text'
+            )
+        );
+
+    add_settings_section( 'eapia-mapping-settings', 'User Mapping', 'eapia_mapping_options', 'eapia-settings');
+
+    add_settings_field(
+        'eapia-username',
+        'Username',
+        'eapia_render_text_input_field',
+        'eapia-settings',
+        'eapia-mapping-settings',
+        array(
+            'field' => 'eapia-username',
+            'help' => 'The username will be sent to the API with this key. <em>(Default: username)</em>',
+            'type' => 'text'
+            )
+        );
+
+    add_settings_field(
+        'eapia-email',
+        'Email',
+        'eapia_render_text_input_field',
+        'eapia-settings',
+        'eapia-mapping-settings',
+        array(
+            'field' => 'eapia-email',
+            'help' => 'The password will be sent to the API with this key. <em>(Default: password)</em>',
+            'type' => 'text'
+            )
+        );
 }
 
+function eapia_render_text_input_field($args) {
+    $field = $args['field'];
+    $help = $args['help'];
+    $type = $args['type'];
+    $value = get_option($field); ?>
+<input type="<?php _e($type); ?>" name="<?php _e($field); ?>" value="<?php _e(get_option($field)); ?>" />
+<p><?php _e($help); ?></p>
+<?php
+}
 
-function eapia_options(){
+function eapia_mapping_options(){ ?>
+    <p>The plugin must create a WordPress user account for users authenticated externally. Use this section to map required WordPress user information to returned information from your API.</p>
+<?php }
+
+function eapia_general_options(){
+    return;
+}
+
+function eapia_render_options(){
     global $eapia_plugin_name;
-    if (current_user_can('manage_options')) {?>
+    if (!current_user_can('manage_options')) {
+        wp_die(__('You do not have sufficient permissions to access this page.'));
+    }?>
         <div class="wrap">
-            <h2><?php _e( $eapia_plugin_name) . ' Settings' ; ?></h2>
+            <h2><?php _e( $eapia_plugin_name . ' Settings') ; ?></h2>
             <form method="post" action="options.php">
                 <?php
                 settings_fields( 'eapia-settings-group' );
-                do_settings_sections( 'eapia-options' );
-                settings_errors( );
-                ?>
-                <table class="form-table">
-                        <tr valign="top">
-                        <th scope="row"><label for="eapia-login-endpoint">API endpoint for login</label></div></th>
-                        <td>
-                            <input type="url" name="eapia-login-endpoint" value="<?php echo get_option('eapia-login-endpoint', 'http://'); ?>" />
-                            <p><strong>Required.</strong> The plugin will send a POST request to this URL.</p>
-                        </td>
-                        </tr>
+                settings_fields( 'eapia-settings-group' );
+                do_settings_sections( 'eapia-settings' );
 
-                        <tr valign="top">
-                        <th scope="row"><label for="eapia-username-key">Username key</label></div></th>
-                        <td>
-                            <input type="text" name="eapia-username-key" value="<?php echo get_option('eapia-username-key'); ?>" />
-                            <p>The username will be sent to the API with this key. <em>(Default: username)</em></p>
-                        </td>
-                        </tr>
-
-                        <tr valign="top">
-                        <th scope="row"><label for="eapia-password-key">Password key</label></div></th>
-                        <td>
-                            <input type="text" name="eapia-password-key" value="<?php echo get_option('eapia-password-key'); ?>" />
-                            <p>The password will be sent to the API with this key. <em>(Default: password)</em></p>
-                        </td>
-                        </tr>
-                    </table>
-
-                    <?php submit_button(); ?>
+                settings_errors();
+                submit_button(); ?>
             </form>
         </div>
-    <?php }
+    <?php
 }
 
 
