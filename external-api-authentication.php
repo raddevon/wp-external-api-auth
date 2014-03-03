@@ -106,10 +106,10 @@ add_filter( 'authenticate', 'eapia_auth', 10, 3 );
 
 function eapia_auth( $user, $username, $password ){
     $endpoint = get_option( 'eapia-login-endpoint' );
-    $username_key = get_option( 'eapia-username-key', 'username' );
-    $password_key = get_option( 'eapia-password-key', 'password' );
-    // Make sure a username and password are present for us to work with
-    if($username == '' || $password == '' || !$endpoint ) return;
+    $username_key = get_option( 'eapia-username-key', 'username' ) ?: 'username';
+    $password_key = get_option( 'eapia-password-key', 'password' ) ?: 'password';
+    // Makes sure we have an endpoint set
+    if(!$endpoint ) return;
 
     $response = wp_remote_post( $endpoint, array(
         $username_key => $username,
