@@ -56,7 +56,8 @@ function eapia_register_settings() {
 
 
 function eapia_options(){
-    global $eapia_plugin_name; ?>
+    global $eapia_plugin_name;
+    if (current_user_can('manage_options')) {?>
         <div class="wrap">
             <h2><?php _e( $eapia_plugin_name) . ' Settings' ; ?></h2>
             <form method="post" action="options.php">
@@ -94,7 +95,8 @@ function eapia_options(){
                     <?php submit_button(); ?>
             </form>
         </div>
-<?php }
+    <?php }
+}
 
 
 /************************************
