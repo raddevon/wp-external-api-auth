@@ -70,8 +70,8 @@ function eapia_options(){
                         <tr valign="top">
                         <th scope="row"><label for="eapia-login-endpoint">API endpoint for login</label></div></th>
                         <td>
-                            <input type="url" name="eapia-login-endpoint" value="<?php echo get_option('eapia-login-endpoint'); ?>" />
-                            <p>The plugin will post to this URL.</p>
+                            <input type="url" name="eapia-login-endpoint" value="<?php echo get_option('eapia-login-endpoint', 'http://'); ?>" />
+                            <p><strong>Required.</strong> The plugin will send a POST request to this URL.</p>
                         </td>
                         </tr>
 
